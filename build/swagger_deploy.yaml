@@ -1,0 +1,37 @@
+name: Deploy Swagger
+
+on:
+  workflow_call:
+    inputs:
+      awsRegion:
+        required: true
+        type: string
+      projectName:
+        required: true
+        type: string
+      swaggerFile:
+        required: true
+        type: string
+      swaggerBucket:
+        required: true
+        type: string
+    secrets:
+      awsAccessKeyId:
+        required: true
+      awsSecretAccessKey:
+        required: true
+
+  jobs:
+    reusable_workflow_job:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v1.5.5
+          with:
+            aws-access-key-id: ${{ secrets.awsAccessKeyId }}
+            aws-secret-access-key: ${{ secrets.awsSecretAccessKey }}
+            aws-region: ${{ inputs.awsRegion }}
+
+        - name: Deploy swagger api to S3 bucket
+            run: |
+              aws s3 cp {{ $inputs.swaggerFile }} ${{ inputs.swaggerS3Bucket }}/${{ inputs.projectName }}/openapi3.json --acl public-read
