@@ -1,6 +1,9 @@
 name: Deploy Swagger
 
 on:
+  push:
+    branches:
+      - main
   workflow_call:
     inputs:
       awsRegion:
@@ -32,6 +35,12 @@ on:
             aws-secret-access-key: ${{ secrets.awsSecretAccessKey }}
             aws-region: ${{ inputs.awsRegion }}
 
+        - name: Check if Swagger Exists
+          id: check_files
+          uses: anstor/file-existence-action@v1
+          with:
+            files: ${{ swaggerFile }}
+
         - name: Deploy swagger api to S3 bucket
-            run: |
-              aws s3 cp {{ $inputs.swaggerFile }} ${{ inputs.swaggerS3Bucket }}/${{ inputs.projectName }}/openapi3.json --acl public-read
+          if: steps.check_files.outputs.files_exists == 'true'
+          run: aws s3 cp {{ $inputs.swaggerFile }} ${{ inputs.swaggerS3Bucket }}/${{ inputs.projectName }}/openapi3.json --acl public-read
