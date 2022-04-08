@@ -6,6 +6,7 @@ on:
       awsRegion:
         required: true
         type: string
+    secrets:
       projectName:
         required: true
         type: string
@@ -15,7 +16,6 @@ on:
       swaggerBucket:
         required: true
         type: string
-    secrets:
       awsAccessKeyId:
         required: true
       awsSecretAccessKey:
@@ -35,8 +35,8 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: ${{ inputs.swaggerFile }}
+          files: ${{ secrets.swaggerFile }}
 
       - name: Deploy swagger api to S3 bucket
         if: steps.check_files.outputs.files_exists == 'true'
-        run: aws s3 cp {{ $inputs.swaggerFile }} ${{ inputs.swaggerS3Bucket }}/${{ inputs.projectName }}/openapi3.json --acl public-read
+        run: aws s3 cp {{ secrets.swaggerFile }} ${{ secrets.swaggerS3Bucket }}/${{ secrets.projectName }}/openapi3.json --acl public-read
