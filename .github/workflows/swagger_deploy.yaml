@@ -45,4 +45,4 @@ jobs:
       - name: Deploy swagger api to S3 bucket
         if: steps.check_files.outputs.files_exists == 'true'
         run: |
-          aws s3 cp ${{ inputs.swaggerFile }} "${{ secrets.swaggerS3Bucket }}/${{ inputs.projectName }}/openapi3.json" --acl public-read
+          aws s3 cp ${{ inputs.swaggerFile }} "${{ secrets.SWAGGER_S3_BUCKET }}/${{ inputs.projectName }}/openapi3.json" --acl public-read
