@@ -12,10 +12,9 @@ on:
       swaggerFile:
         required: true
         type: string
+    secrets:
       swaggerBucket:
         required: true
-        type: string
-    secrets:
       awsAccessKeyId:
         required: true
       awsSecretAccessKey:
@@ -46,4 +45,4 @@ jobs:
       - name: Deploy swagger api to S3 bucket
         if: steps.check_files.outputs.files_exists == 'true'
         run: |
-          aws s3 cp ${{ inputs.swaggerFile }} ${{ inputs.swaggerS3Bucket }}/${{ inputs.projectName }}/openapi3.json --acl public-read
+          aws s3 cp ${{ inputs.swaggerFile }} "${{ secrets.swaggerS3Bucket }}/${{ inputs.projectName }}/openapi3.json" --acl public-read
