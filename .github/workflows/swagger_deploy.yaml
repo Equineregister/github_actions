@@ -38,7 +38,7 @@ jobs:
         id: check_files
         uses: anstor/file-existence-action@v1
         with:
-          files: ${{ swaggerFile }}
+          files: ${{ inputs.swaggerFile }}
 
       - name: Deploy swagger api to S3 bucket
         if: steps.check_files.outputs.files_exists == 'true'
