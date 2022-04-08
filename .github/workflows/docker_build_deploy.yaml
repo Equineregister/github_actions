@@ -2,6 +2,10 @@
 name: Docker Build and Deploy
 on:
   workflow_call:
+    inputs:
+      awsRegion:
+        required: true
+        type: string
     secrets:
       bitbucketSSHKey:
         required: true
@@ -28,7 +32,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.awsAccessKeyId }}
           aws-secret-access-key: ${{ secrets.awsSecretAccessKey }}
-          aws-region: eu-west-2
+          aws-region: ${{ inputs.awsRegion }}
 
       - name: Login to Amazon ECR
         id: login-ecr
