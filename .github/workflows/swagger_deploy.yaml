@@ -9,13 +9,10 @@ on:
     secrets:
       projectName:
         required: true
-        type: string
       swaggerFile:
         required: true
-        type: string
       swaggerBucket:
         required: true
-        type: string
       awsAccessKeyId:
         required: true
       awsSecretAccessKey:
