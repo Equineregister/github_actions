@@ -1,5 +1,5 @@
+---
 name: Deploy Swagger
-
 on:
   push:
     branches:
@@ -23,7 +23,6 @@ on:
         required: true
       awsSecretAccessKey:
         required: true
-
 jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
