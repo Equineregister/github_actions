@@ -1,0 +1,12 @@
+name: Push to non-master branch
+on:
+  push:
+    branches-ignore:
+      - develop
+jobs:
+  golanci-lint: # Internally excludes unit tests for non-PR triggers (needs externalising)
+    uses: Equineregister/Github-Action-GoLangCI-Lint/.github/workflows/action.yaml@v1.1.0
+    secrets:
+      bitbucketSSHKey: ${{ secrets.BITBUCKET_SSH_PRIVATE_KEY }}
+      sshKey: ${{ secrets.SSH_PRIVATE_KEY }}
+

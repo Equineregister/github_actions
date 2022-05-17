@@ -1,0 +1,26 @@
+name: Push to master branch
+on:
+  push:
+    branches:
+      - develop
+      - wbfsh-develop
+jobs:
+  docker_build_deploy: # Contains an internal conditional to only deploy on merge or tag, not PR
+    uses: Equineregister/Github-Action-Docker-Build-Deploy/.github/workflows/action.yaml@v1.2.0
+    secrets:
+      bitbucketSSHKey: ${{ secrets.BITBUCKET_SSH_PRIVATE_KEY }}
+      sshKey: ${{ secrets.SSH_PRIVATE_KEY }}
+      awsRegion: eu-west-2
+      awsAccessKeyId: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  swagger_deploy:
+    uses: Equineregister/Github-Action-Swagger/.github/workflows/action.yaml@v2.2.0
+    with:
+      projectName: ${{ github.event.repository.name }}
+      swaggerFile: ./auth/gen/http/openapi3.json # <--- Update to the path of the swagger file --->
+    secrets:
+      awsRegion: eu-west-2
+      swaggerBucket: ${{ secrets.SWAGGER_S3_BUCKET }}
+      awsAccessKeyId: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

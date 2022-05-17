@@ -1,0 +1,29 @@
+name: Pull request created
+on:
+  pull_request:
+jobs:
+  golanci-lint-unit-test:
+    uses: Equineregister/Github-Action-GoLangCI-Lint/.github/workflows/action.yaml@v1.1.0
+    secrets:
+      bitbucketSSHKey: ${{ secrets.BITBUCKET_SSH_PRIVATE_KEY }}
+      sshKey: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  sonarqube-analyse:
+    uses: Equineregister/Github-Action-Sonarqube-Analyse/.github/workflows/action.yaml@v1.1.0
+    with:
+      projectName: ${{ github.event.repository.name }}
+    secrets:
+      wireguardDevEndpoint: ${{ secrets.WIREGUARD_DEV_SERVER_ENDPOINT }}
+      wireguardDevPrivateKey: ${{ secrets.WIREGUARD_DEV_PRIVATE_KEY }}
+      wireguardDevPublicKey: ${{ secrets.WIREGUARD_DEV_SERVER_PUBLIC_KEY }}
+      sonarqubeHostURL: ${{ secrets.SONAR_HOST_URL }}
+      sonarqubeToken: ${{ secrets.SONAR_TOKEN }}
+
+  docker_build: # Contains an internal conditional to only deploy on merge or tag, not PR
+    uses: Equineregister/Github-Action-Docker-Build-Deploy/.github/workflows/action.yaml@v1.2.0
+    secrets:
+      bitbucketSSHKey: ${{ secrets.BITBUCKET_SSH_PRIVATE_KEY }}
+      sshKey: ${{ secrets.SSH_PRIVATE_KEY }}
+      awsRegion: eu-west-2
+      awsAccessKeyId: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

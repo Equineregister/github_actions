@@ -1,0 +1,14 @@
+name: Release tagged
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  docker_build_deploy: # Contains an internal conditional to only deploy on merge or tag, not PR
+    uses: Equineregister/Github-Action-Docker-Build-Deploy/.github/workflows/action.yaml@v1.2.0
+    secrets:
+      bitbucketSSHKey: ${{ secrets.BITBUCKET_SSH_PRIVATE_KEY }}
+      sshKey: ${{ secrets.SSH_PRIVATE_KEY }}
+      awsRegion: eu-west-2
+      awsAccessKeyId: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
